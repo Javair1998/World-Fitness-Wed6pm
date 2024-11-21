@@ -1,0 +1,267 @@
+   <!-- 
+     Names: Tavaughn Henry, Aljermaine Hutchinson , Nswain Shakespeare and Roxann Jahnson
+    ID#: 2305252 , 2205641 , 2006054 , 2306621
+    Class Day and Time: Wednesday 6pm - 8pm -->
+
+<!-- 5.	Invoice Generation:
+a.	After checkout, generate an invoice with the following details:
+`Name of company`
+`Date of invoice`
+`Shipping information` (from checkout)
+`Invoice number` (unique)
+‘trn’
+`Purchased items` (name, quantity, price, discount)
+`Taxes`
+`Subtotal`
+`Total cost`
+b.	Append this invoice to the user’s array of invoices (array of objects). Also store the invoice to localStorage with the key called AllInvoices (as an array of objects) to access later.
+After generating the invoice
+c.	Optionally, display a message indicating that the invoice has been “sent” to the user’s email
+ -->
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Invoice</title>
+    <link rel="stylesheet" href="Style.css">
+</head>
+<body>
+    <div id="invoice">
+        <Center><h2>Invoice</h2></Center>
+        <div id="invoice-content">
+            
+            <!-- Invoice content will be dynamically generated here -->
+             
+        </div>
+    </div>
+    <div id="message"></div>
+
+        <div class="Ibtn">
+            <button id="cancel-Ibtn">Cancel</button>
+            <button id="exit-Ibtn">Exit</button> 
+            <a href="Dashboard.html"><button >Dashboard</button></a>
+            
+        </div>
+
+    <script>
+        // Invoice
+    document.addEventListener('DOMContentLoaded', () => {
+    const invoiceContainer = document.getElementById('invoice-content');
+    const cartItems = JSON.parse(localStorage.getItem('cartItems')) || [];
+    const name = localStorage.getItem('name'); // Retrieve Name from localStorag
+    const trn = localStorage.getItem('trn'); // Retrieve TRN from localStorag
+    const address = localStorage.getItem('address'); // Retrieve Address from localStorag
+
+    if (cartItems.length === 0) {
+        invoiceContainer.innerHTML = '<p>No items in the cart.</p>';
+        return;
+    }
+    
+    function generateInvoice(items) {
+         // Generate a unique invoice number
+        const invoiceNumber = 'INV-' + Math.floor(100000 + Math.random() * 900000); 
+        // Get the current date for the invoice
+        const invoiceDate = new Date().toLocaleDateString();
+        const companyName = "World Fitness";
+        // const companyAddress = "123 Main St, Anytown, USA 12345";
+       
+        let subtotal = 0;
+        let taxRate = 0.15; // 15% tax
+        let discountRate = 0.10; // 10% discount
+        invoiceContainer.innerHTML = ''; // Clear existing content
+
+
+         // Display the company name, invoice number, and date
+         const invoiceHeader = document.createElement('div');
+         invoiceHeader.innerHTML = `
+             <h2>${companyName}</h2>
+             <p><strong>Invoice Number:</strong> ${invoiceNumber}</p>
+             <p><strong>Date:</strong> ${invoiceDate}</p>
+             <p><strong>Name:</strong>${name} </p>
+             <p><strong>TRN:</strong>${trn} </p>
+             <p><strong>Address:</strong>${address} </p>
+             <hr>
+         `;
+         invoiceContainer.appendChild(invoiceHeader);
+
+    
+        // Create a table element
+        const table = document.createElement('table');
+        table.classList.add('invoice-table');
+    
+        // Create table header
+        const header = document.createElement('thead');
+        header.innerHTML = `
+            <tr>
+                <th>Product Name</th>
+                <th>Quantity</th>
+                <th>Price</th>
+                <th>Total</th>
+            </tr>
+        `;
+        table.appendChild(header);
+    
+        // Create table body
+        const body = document.createElement('tbody');
+        const itemCount = {};
+    
+        // Count the items in the cart and calculate subtotal
+        items.forEach(item => {
+            if (itemCount[item.name]) {
+                itemCount[item.name].quantity++;
+            } else {
+                itemCount[item.name] = {
+                    ...item,
+                    quantity: item.quantity
+                };
+            }
+        });
+    
+        // Loop through the counted items to populate the table
+        for (const itemName in itemCount) {
+            const item = itemCount[itemName];
+            const totalPrice = item.price * item.quantity; // Calculate total price for the item
+            subtotal += totalPrice; // Accumulate the subtotal
+    
+            const row = document.createElement('tr');
+            row.innerHTML = `
+                <td>${item.name}</td>
+                <td>${item.quantity}</td>
+                <td>$${item.price.toLocaleString()}</td>
+                <td>$${totalPrice.toLocaleString()}</td>
+            `;
+            body.appendChild(row);
+        }
+    
+        table.appendChild(body);
+        invoiceContainer.appendChild(table); // Append the table to the invoice container
+        
+        
+        // Create a wrapper div for the summary
+        const summaryWrapper = document.createElement('div');
+        summaryWrapper.style.width = '50%'
+        summaryWrapper.style.borderCollapse='collapse'
+        summaryWrapper.style.float = 'right'
+        summaryWrapper.style.marginTop = '20px'
+        summaryWrapper.style.marginRight = '20px'
+        
+        summaryWrapper.style.border = '1px solid #000'; // Set border style
+        summaryWrapper.style.padding = '10px'; // Add padding inside the border
+       
+    
+        // Create and append summary rows
+        const summaryRow = document.createElement('tr');
+        summaryRow.innerHTML = `
+            <td colspan="1" style="text-align: left;"><strong>Subtotal:</strong></td>
+            <td style="text-align: right;"><strong>$${subtotal.toLocaleString()}</strong></td>
+        `;
+        summaryWrapper.appendChild(summaryRow);
+    
+        const tax = subtotal * taxRate;
+        const taxRow = document.createElement('tr');
+        taxRow.innerHTML = `
+            <td colspan="1" style="text-align: left;"><strong>Tax (15%):</strong></td>
+            <td style="text-align: right;"><strong>$${tax.toLocaleString()}</strong></td>
+        `;
+        summaryWrapper.appendChild(taxRow);
+    
+        const discount = subtotal * discountRate;
+        const discountRow = document.createElement('tr');
+        discountRow.innerHTML = `
+            <td colspan="1" style="text-align: left;"><strong>Discount (10%):</strong></td>
+            <td style="text-align: right;"><strong>-$${discount.toLocaleString()}</strong></td>
+        `;
+        summaryWrapper.appendChild(discountRow);
+    
+        const total = subtotal + tax - discount;
+        const totalRow = document.createElement('tr');
+        totalRow.innerHTML = `
+            <td colspan="1" style="text-align: left;"><strong>Total:</strong></td>
+            <td style="text-align: right;"><strong>$${total.toLocaleString()}</strong></td>
+        `;
+        summaryWrapper.appendChild(totalRow);
+    
+        // Append the summary wrapper to the invoice container
+        invoiceContainer.appendChild(summaryWrapper);
+    }
+    // Optional message indicating the invoice was sent to the user's email
+    const message = document.getElementById('message'); 
+        message.textContent = "Your invoice has been sent to your email.";
+        message.style.marginTop = '200px';
+        message.style.marginLeft = '499px';
+        message.style.fontStyle = 'italic';
+
+
+
+    generateInvoice(cartItems);
+
+    // Store invoice data with TRN
+    const invoiceData = {
+        invoiceNumber: 'INV-' + Math.floor(100000 + Math.random() * 900000),
+        invoiceDate: new Date().toLocaleDateString(),
+        name: name || 'Unknown',
+        trn: localStorage.getItem('trn') || 'Not provided',
+        address: address || 'Not provided',
+        items: cartItems || [],
+        subtotal: cartItems.reduce((sum, item) => sum + (item.price * item.quantity), 0),
+        tax: cartItems.reduce((sum, item) => sum + (item.price * item.quantity), 0) * 0.15,
+        discount: cartItems.reduce((sum, item) => sum + (item.price * item.quantity), 0) * 0.10,
+        total: (cartItems.reduce((sum, item) => sum + (item.price * item.quantity), 0) * 1.15) - 
+               (cartItems.reduce((sum, item) => sum + (item.price * item.quantity), 0) * 0.10)
+    };
+
+    let AllInvoices = JSON.parse(localStorage.getItem('AllInvoices')) || [];
+    AllInvoices.push(invoiceData);
+    localStorage.setItem('AllInvoices', JSON.stringify(AllInvoices));
+
+});//End  of function
+
+    //Cancel button
+    const cancelButton = document.getElementById('cancel-Ibtn'); // assuming the cancel button has an id of "cancel"
+
+    cancelButton.addEventListener('click', () => {
+    window.location.href = "Product.html";
+   
+});
+//  Exit button
+const exitButton = document.getElementById('exit-Ibtn');
+
+// add an event listener to the button click event
+exitButton.addEventListener('click', () => {
+  // navigate back to the homepage
+  window.location.href = "Home.html";
+});
+
+//NUMBER 6 USER FREQUENCY
+
+function ShowUserFrequency() {
+        const registerData = JSON.parse(localStorage.getItem('RegisterData')) || [];
+        const ageGroups = { '18-25': 0, '26-35': 0, '36-50': 0, '50+': 0 };
+        const genderCounts = { Male: 0, Female: 0, Other: 0 };
+    
+        // Process user data
+        registerData.forEach(user => {
+            if (user.gender) genderCounts[user.gender] = (genderCounts[user.gender] || 0) + 1;
+            if (user.age) {
+                const age = parseInt(user.age, 10);
+                if (age >= 18 && age <= 25) ageGroups['18-25']++;
+                else if (age >= 26 && age <= 35) ageGroups['26-35']++;
+                else if (age >= 36 && age <= 50) ageGroups['36-50']++;
+                else if (age > 50) ageGroups['50+']++;
+            }
+        });
+    
+        // Display results on the dashboard
+        console.log('Gender Counts:', genderCounts);
+        console.log('Age Groups:', ageGroups);
+        
+        // Update dashboard 
+        document.getElementById('genderStats').textContent = JSON.stringify(genderCounts, null, 2);
+        document.getElementById('ageStats').textContent = JSON.stringify(ageGroups, null, 2);
+    }
+    
+    </script>
+</body>
+</html>

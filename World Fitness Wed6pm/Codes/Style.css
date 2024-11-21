@@ -1,0 +1,409 @@
+/* Login Page */
+* {
+    margin: 0;
+    padding: 0;
+    font-family: 'Times New Roman', Times, serif;
+}
+.Ground {
+    height: 100%;
+    width: 100%;
+    background-image: linear-gradient(rgba(0, 0, 0, 0.4), rgba(0, 0, 0, 0.4)), url('../Assets/back.jpg');
+    background-position: center;
+    background-size: cover;
+    position: absolute;
+}
+.form_box {
+    width: 380px;
+    height: 480px;
+    position: relative;
+    margin: 6% auto;
+    background: white;
+    border-radius: 30px;
+    padding: 5px;
+    overflow: hidden;
+    overflow-y: auto;
+}
+.scrollable-content {
+    height: 300px; /* Fixed height for testing */
+    overflow-y: auto; /* Enable vertical scrolling */
+    padding: 10px; 
+}
+.button-box {
+    width: 220px;
+    margin: 35px auto;
+    position: relative;
+    box-shadow: 0 0 20px 9px #7e35181f;
+    border-radius: 30px;
+}
+.toggle-btn {
+    padding: 10px 30px;
+    cursor: pointer;
+    background: transparent;
+    border: 0;
+    outline: none;
+    position: relative;
+}
+#btn {
+    top: 0;
+    left: 0;
+    position: absolute;
+    width: 110px;
+    height: 100%;
+    background: linear-gradient(to right, #18ff10, #ffad06);
+    border-radius: 30px;
+    transition: .5s;
+}
+.inputGroup {
+    top: 180px;
+    position: absolute;
+    width: 280px;
+    transition: .5s;
+}
+#login-trn, #login-password, #firstName, #lastName, #dob, #gender, #phone, #email, #trn, #password {
+    width: 100%;
+    padding: 10px 0;
+    margin: 5px 0;
+    border-left: 0;
+    border-top: 0;
+    border-right: 0;
+    border-bottom: 1px solid #999;
+    outline: none;
+    background: transparent;
+}
+#login-submit, #login-cancel, #register-submit, #register-cancel {
+    width: 50%;
+    padding: 10px 30px;
+    cursor: pointer;
+    display: block;
+    margin: 10px auto;
+    background: linear-gradient(to right, #18ff10, #ffad06);
+    border: 0;
+    outline: none;
+    border-radius: 30px;
+}
+.check-box {
+    margin: 30px 10px 30px 0;
+}
+/* span {
+    color: #777;
+    font-size: 12px;
+    bottom: 66px;
+    position: absolute;
+} */
+#Login {
+    left: 50px;
+}
+#Register{
+    left: 450px;
+}
+#message {
+    font-size: 17px;
+    margin-top: 10px;
+
+}
+footer {
+    position: relative;
+    bottom: 0;
+    margin-top: auto;
+    width: 100%;
+    height: 175px;
+    background-color: black;
+    color: #fff;
+    padding: 10px;
+}
+
+/* Navigation Bar */
+.logo{
+    width:170px;
+}
+
+.navbar{
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+    background-color: black;
+    overflow: hidden
+}
+.navbar li{
+
+    list-style:none ;
+    display: inline-block;
+    align-items: center;
+    padding-top: 40px;
+}
+
+.navbar li a{
+    color: white;
+    padding: 30px;
+}
+.navbar li a:hover{
+    color: aqua;
+}
+
+/* Error Page */
+.error{
+    width: 100%;
+    height: 100%;
+    background-color: #f2f2f2;
+    background-position: center;
+    background-size: cover;
+    background-image: linear-gradient(rgba(0, 0, 0, 0.4), rgba(0, 0, 0, 0.4)), url('../Assets/Error.jpg');
+    background-repeat: no-repeat;
+    position: absolute;
+}
+
+/* Home Page */
+.top{
+    background-image: linear-gradient(rgba(0, 0, 0, 0.4), rgba(0, 0, 0, 0.4)), url('../Assets/top.jpeg');
+    width: 100%;
+    height: 750px;
+}
+.motto{
+   display: flex;
+   justify-content: center;
+   align-items: center;
+   height: 50rem;
+   color: #fff;
+   font-size: 40px;
+   
+}
+.content-container {
+    display: flex;
+    justify-content: space-between; /* Space between the two sections */
+   
+}
+
+#routine-list {
+    flex: 1; /* Allows the routine list to take available space */
+    margin-right: 20px; /* Space between the list and the mission statement */
+    color: #d10101;
+}
+
+.mission-statement {
+    margin-top: 150px;
+    flex: 1; /* Allows the mission statement to take available space */
+    color: blue;
+}
+.mission-statement p{
+    width: 100%;
+    overflow: auto;
+    padding: 20px;
+    border: 1px solid #ccc;
+    border-radius: 10px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+.mission-statement h3{
+    text-align: center;
+}
+#routine-list li{
+    text-align: center;
+    list-style: none;
+    font-size: larger;
+    font-weight: bold;   
+}
+#routine-list p{
+
+    width: 100%;
+    overflow: auto;
+    padding: 20px;
+    border: 1px solid #ccc;
+    border-radius: 10px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    
+}
+
+/* Products Page */
+.product {
+    display: grid;
+    grid-template-rows: 1fr auto; 
+    justify-items: center; /* Center items horizontally */
+    align-items: center; /* Center items vertically */
+}
+
+.container{
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 2rem;
+    transition: transform .5s;
+}
+.container .title{
+    font-size: 3.5rem;
+    color: #444;
+    margin-bottom: 3rem;
+    text-transform: uppercase;
+    text-align: center;
+}
+
+.container .product_container{
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 20px;
+
+}
+
+
+.container .product_container .product{
+    align-items: center;
+    padding:3rem 2rem;
+    background: #fff;
+    box-shadow: 0.5rem 1rem  2rem rgba(0,0,0,0.1);
+    outline: .1rem solid  #ccc;
+    outline-offset: -1.5rem;
+    border-radius: 20px;
+
+}
+.container .product_container .product:hover{
+    outline: .1rem solid #222;
+    outline-offset: 0;
+}
+.container .product_container .product:hover img{
+    transform: scale(.9);
+}
+.container .product_container .product h3{
+    padding: 3rem;
+    font-weight: 500;
+    font-size: large;
+    color: #444;
+}
+.container .product_container .product .price{
+    font-size: large;
+    letter-spacing: 7px;
+    color: #18ff10;
+}
+
+.container .product_container .product img{
+    width: 90%;
+    filter: drop-shadow(0 50px 20px  rgba(0,0,0,0.1));
+
+}
+
+.add-to-cart  {
+    padding: 10px;
+    align-items: center;
+    background-color: #15d341;
+    color: #fff;
+    border: none;
+    border-radius: 30px;
+    cursor: pointer;
+    margin-top: 50px;
+}
+.confirm-btn,
+.cancel-btn,
+#clear-all,
+#close-cart,
+#checkoutP {
+    padding: 10px;
+    align-items: center;
+    background-color: #15d341;
+    color: #fff;
+    border: none;
+    border-radius: 20px;
+    cursor: pointer;
+    margin-top: 50px;
+    transition: background-color 0.3s ease;
+}
+
+.add-to-cart:hover,
+.confirm-btn:hover,
+.cancel-btn:hover,
+#clear-all:hover,
+#close-cart:hover,
+#checkoutP:hover {
+    background-color: yellow;
+}
+
+/* cart */
+
+#cartTab{
+    width: 100%;
+    background-color: black;
+    color: #eee;
+    display: grid;
+    grid-template-rows: 70px 1fr 70px;
+}
+#cartTab h1{
+    padding: 20px;
+    margin: 0;
+    font-weight: 300;
+}
+.btn{
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+}
+.btn button{
+    background-color: #ffad06;
+    border: 1px solid;
+    font-family: Poppins;
+    font-weight: 500;
+    cursor: pointer;
+}
+#exit-btn{
+    background-color: #eee;
+}
+#cartTab img{
+    width: 50px;
+    height: 50px;
+}
+#cartTab .item{
+    display: grid;
+    grid-template-columns: 70px 150px 50px 1fr ;
+    gap: 10px;
+    text-align: center;
+    align-items: center;
+}
+
+#cartTab span {
+    margin-left: 150px; 
+}
+
+
+
+/* Invoice */
+
+.invoice-table {
+    width: 100%; /* Full width */
+    border: 1px solid;
+    margin-top: 20px; /* Space above the table */
+    margin-bottom: 20px;
+}
+
+.invoice-table th, .invoice-table{
+    border: 1px solid; /* Border for table cells */
+    padding: 15px; 
+    text-align: center;
+}
+.invoice-table td{
+    text-align: center;
+}
+
+.summary-table td{
+    text-align: right;
+    
+}
+.Ibtn {
+    display: flex;
+    justify-content: center; 
+    align-items: center; 
+    position: absolute; 
+    bottom: 20px; 
+    left: 50%; 
+    font-weight: 500;
+    transform: translateX(-50%); 
+}
+.Ibtn button{
+    background-color: #ffad06;
+    border: 1px solid;
+    border-radius: 20px;
+    font-family: Poppins;
+    width: 350px;
+    cursor: pointer;
+}
+
+/* About us Page  */
+.about-us p{
+    text-align: center;
+    padding: 20px;
+    border: 1px solid #ccc;
+    border-radius: 10px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}

@@ -1,0 +1,241 @@
+    <!-- 
+    Names: Tavaughn Henry, Aljermaine Hutchinson , Nswain Shakespeare and Roxann Jahnson
+    ID#: 2305252 , 2205641 , 2006054 , 2306621
+    Class Day and Time: Wednesday 6pm - 8pm 
+    -->
+
+    <!-- 
+6.	Additional Functionality:
+a.	ShowUserFrequency() – Show’s user requency based on Gender and Age Group:
+i.	show how many registered users fall under specific gender categories (e.g. Male, Female, Other)
+ii.	show how many registered users fall under different age groups (e.g., 18-25, 26-35, 36-50, 50+).
+iii.	Display this data on a dashboard or a separate page. 
+b.	ShowInvoices() - displays all invoices and allow the visitor to search for any of the invoices (using trn) stored in AllInvoices from localStorage using console.log().
+c.	GetUserInvoices() – displays all the invoices for a user based on trn stored in the localStorage key called, RegisterData. 
+ -->
+ <!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Invoice Management</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+            background-color: #f4f4f9;
+        }
+        .container {
+            max-width: 400px;
+            margin: auto;
+            padding: 20px;
+            background: #fff;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+            border-radius: 8px;
+            text-align: center;
+        }
+        input[type="text"] {
+            width: calc(100% - 22px);
+            padding: 10px;
+            margin-bottom: 15px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            font-size: 16px;
+        }
+        button {
+            padding: 10px 20px;
+            background-color: #007BFF;
+            color: #fff;
+            border: none;
+            border-radius: 5px;
+            font-size: 16px;
+            cursor: pointer;
+            margin-bottom: 10px;
+        }
+        button:hover {
+            background-color: #0056b3;
+        }
+        .chart-container {
+            margin: 20px 0;
+            padding: 20px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            background: #f9f9f9;
+        }
+        .chart-title {
+            color: #333;
+            text-align: center;
+            margin-bottom: 20px;
+        }
+        .total-users {
+            text-align: center;
+            color: #666;
+            margin: 10px 0;
+        }
+        .bar-container {
+            display: flex;
+            align-items: center;
+            margin: 10px 0;
+        }
+        .bar-label {
+            width: 100px;
+            text-align: right;
+            padding-right: 10px;
+        }
+        .bar {
+            margin: 5px 0;
+        }
+        .bar-value {
+            margin-left: 10px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Invoice</h1>
+        <p>Manage invoices:</p>
+        
+        <!-- Search for invoices by TRN -->
+        <h2>Search Invoices</h2>
+        <input type="text" id="trnInput" placeholder="Enter TRN to search">
+        <button onclick="ShowInvoices()">Search All Invoices</button>
+        
+        <!-- Retrieve user-specific invoices -->
+        <h2>User Invoices</h2>
+        <button onclick="GetUserInvoices()">Get User Invoices</button>
+    </div>
+
+    <h1>User Frequency</h1>
+    <div id="genderChart" class="chart-container">
+        <h2>Gender Distribution</h2>
+    </div>
+    <div id="ageChart" class="chart-container">
+        <h2>Age Group Distribution</h2>
+    </div>
+
+
+    <script>
+        // Show Invoices - Search based on TRN
+        function ShowInvoices() {
+            const trn = document.getElementById("trnInput").value.trim();
+            const allInvoices = JSON.parse(localStorage.getItem("AllInvoices")) || [];
+
+            if (trn) {
+                // Filter invoices based on the entered TRN
+                const filteredInvoices = allInvoices.filter(invoice => invoice.trn === trn);
+
+                if (filteredInvoices.length > 0) {
+                    console.log(`Invoices for TRN: ${trn}`);
+                    console.table(filteredInvoices); // Using console.table for better formatting
+                    alert(`Found ${filteredInvoices.length} invoice(s) for TRN: ${trn}. Check console for details.`);
+                } else {
+                    console.log(`No invoices found for TRN: ${trn}`);
+                    alert(`No invoices found for TRN: ${trn}.`);
+                }
+            } else {
+                console.log("All Invoices:");
+                console.table(allInvoices); // Using console.table for better formatting
+                alert(`Showing all ${allInvoices.length} invoices. Check the console for details.`);
+            }
+        }
+
+        
+        // Get Invoices for User based on TRN
+        function GetUserInvoices() {
+            const registerData = JSON.parse(localStorage.getItem('RegisterData')) || [];
+            const trn = localStorage.getItem('trn'); // Get TRN from localStorage
+            const currentUser = registerData.find(user => user.trn === trn);
+            const allInvoices = JSON.parse(localStorage.getItem("AllInvoices")) || [];
+
+            if (!currentUser) {
+                console.log("Error: User not found in RegisterData");
+                alert("Please login to view your invoices");
+                return;
+            }
+
+            const userInvoices = allInvoices.filter(invoice => invoice.trn === trn);
+
+            if (userInvoices.length > 0) {
+                console.log(`Invoices for TRN (${trn}):`);
+                console.table(userInvoices); // Using console.table for better formatting
+                alert(`Found ${userInvoices.length} invoice(s) for your account. Check console for details.`);
+            } else {
+                console.log(`No invoices found for TRN: ${trn}`);
+                alert(`No invoices found for your account.`);
+            }
+        }
+
+        // Show User Frequency based on Gender and Age Group
+        function ShowUserFrequency() {
+            const users = JSON.parse(localStorage.getItem('RegisterData')) || [];
+            const genderFrequency = { male: 0, female: 0, other: 0 };
+            const ageGroups = { '18-25': 0, '26-35': 0, '36-50': 0, '50+': 0 };
+
+            users.forEach(user => {
+                // Gender frequency
+                const gender = user.gender.toLowerCase();
+                if (genderFrequency[gender] !== undefined) {
+                    genderFrequency[gender]++;
+                }
+
+                // Calculate age from DOB
+                const dob = new Date(user.dob);
+                const today = new Date();
+                let age = today.getFullYear() - dob.getFullYear();
+                const monthDiff = today.getMonth() - dob.getMonth();
+                
+                // Adjust age if birthday hasn't occurred this year
+                if (monthDiff < 0 || (monthDiff === 0 && today.getDate() < dob.getDate())) {
+                    age--;
+                }
+                
+                // Age group frequency
+                if (age >= 18 && age <= 25) {
+                    ageGroups['18-25']++;
+                } else if (age >= 26 && age <= 35) {
+                    ageGroups['26-35']++;
+                } else if (age >= 36 && age <= 50) {
+                    ageGroups['36-50']++;
+                } else if (age > 50) {
+                    ageGroups['50+']++;
+                }
+            });
+
+            // Find maximum values for scaling
+            const maxGenderCount = Math.max(...Object.values(genderFrequency));
+            const maxAgeCount = Math.max(...Object.values(ageGroups));
+
+            const totalUsers = users.length;
+
+            // Generate gender chart
+            const genderChart = document.getElementById('genderChart');
+            genderChart.innerHTML = '<h2 class="chart-title">Gender Distribution</h2>' +
+                `<div class="total-users">Total Registered Users: ${totalUsers}</div>` + 
+                Object.entries(genderFrequency).map(([gender, count]) => `
+                    <div class="bar-container">
+                        <span class="bar-label">${gender}</span>
+                        <img src="../Assets/thinbar.jpg" width="${(count/maxGenderCount * 300)}px" height="20px" class="bar"/>
+                        <span class="bar-value">${count}</span>
+                    </div>
+                `).join('');
+
+            // Generate age chart
+            const ageChart = document.getElementById('ageChart');
+            ageChart.innerHTML = '<h2 class="chart-title">Age Group Distribution</h2>' +
+                `<div class="total-users">Age Distribution of ${totalUsers} Users</div>` + 
+                Object.entries(ageGroups).map(([ageGroup, count]) => `
+                    <div class="bar-container">
+                        <span class="bar-label">${ageGroup}</span>
+                        <img src="../Assets/thinbar.jpg" width="${(count/maxAgeCount * 300)}px" height="20px" class="bar"/>
+                        <span class="bar-value">${count}</span>
+                    </div>
+                `).join('');
+        }
+
+        // Call ShowUserFrequency to display the frequency charts
+        ShowUserFrequency();
+    </script>
+</body>
+</html>
+
+ </body>

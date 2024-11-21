@@ -1,0 +1,140 @@
+   <!-- 
+     Names: Tavaughn Henry, Aljermaine Hutchinson , Nswain Shakespeare and Roxann Jahnson
+    ID#: 2305252 , 2205641 , 2006054 , 2306621
+    Class Day and Time: Wednesday 6pm - 8pm -->
+
+<!-- Checkout
+a.	Show a summary of the shopping cart with the total cost.
+b.	Allow the user to enter their shipping details (e.g., name, address, amount being paid).
+c.	When the user confirms the checkout, generate an invoice. 
+Include:
+d.	Confirm button (confirms the checkout)
+e.	Cancel button (go back to the cart)
+ -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Checkout</title>
+    <link rel="stylesheet" href="Style.css">
+</head>
+<body>
+    <div class="sidebar">
+        <nav style="background-color: black;">
+            <div style="display: flex; justify-content: center; align-items: center;">
+                <img class="logo" src="../Assets/logo.png" alt="logo">
+            </div>
+        </nav>
+    </div>
+    <div class="container">
+        <center><h2>Checkout</h2></center>
+        <div id="cart-summary"></div>
+        <form id="shipping-details">
+            <div class="form-group">
+                <label for="name">Name</label>
+                <input type="text" id="name" required>
+            </div>
+            <div class="form-group">
+                <label for="address">Address</label>
+                <input type="text" id="address" required>
+            </div>
+            <div class="form-group">
+                <label for="amount">Amount</label>
+                <input type="number" id="amount" required>
+            </div>
+            <div class="buttons">
+                <button type="button" class="confirm-btn" id="confirm-checkout">Confirm</button>
+                <button type="button" class="cancel-btn" id="cancel-checkout">Cancel</button>
+            </div>
+        </form>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+    const cartSummary = document.getElementById('cart-summary');
+    const confirmCheckoutButton = document.getElementById('confirm-checkout');
+    const cancelCheckoutButton = document.getElementById('cancel-checkout');
+    const cartItems = JSON.parse(localStorage.getItem('cartItems')) || [];
+    
+
+    function renderCartSummary() {
+        cartSummary.innerHTML = '';
+        let subtotal = 0;
+        const itemCount = {};
+
+        // Count items and calculate subtotal
+        cartItems.forEach(item => {
+            if (itemCount[item.name]) {
+                itemCount[item.name].quantity += item.quantity;
+            } else {
+                itemCount[item.name] = { ...item, quantity: item.quantity };
+            }
+        });
+
+        // Render cart items
+        for (const itemName in itemCount) {
+            const item = itemCount[itemName];
+            const total = item.price * item.quantity;
+            subtotal += total;
+
+            const div = document.createElement('div');
+            div.classList.add('summary-item');
+            div.innerHTML = `
+                ${item.name}
+                $${total.toFixed(2)}
+            `;
+            cartSummary.appendChild(div);
+        }
+
+        const tax = subtotal * 0.15;
+        const discount = subtotal * 0.10;
+        const total = subtotal + tax - discount;
+
+        const totalDiv = document.createElement('div');
+        totalDiv.classList.add('summary-item');
+        totalDiv.innerHTML =`
+            <p>Subtotal: $${subtotal.toLocaleString(2)}</p>
+            <p>Tax (15%): $${tax.toLocaleString(2)}</p>
+            <p>Discount (10%): -$${discount.toLocaleString(2)}</p>
+            <p>Total: $${total.toLocaleString(2)}</p>
+        `;
+        cartSummary.appendChild(totalDiv);
+    }
+
+    confirmCheckoutButton.addEventListener('click', () => {
+        const name = document.getElementById('name').value;
+        const address = document.getElementById('address').value;
+        const amount = parseFloat(document.getElementById('amount').value);
+
+        if (!name || !address || isNaN(amount)) {
+            alert("Please fill out all the details correctly.");
+            return;
+        }
+
+        const invoice = {
+            name,
+            address,
+            cartItems,
+            subtotal: cartItems.reduce((total, item) => total + item.price, 0),
+            amountPaid: amount,
+            total: (cartItems.reduce((total, item) => total + item.price, 0) * 1.15) - (cartItems.reduce((total, item) => total + item.price, 0) * 0.10)
+        };
+
+        // Save name and address to localStorage
+        localStorage.setItem('name', name);
+        localStorage.setItem('address', address);
+
+        localStorage.setItem('invoice', JSON.stringify(invoice));
+        window.location.href = "invoice.html";
+    });
+
+    cancelCheckoutButton.addEventListener('click', () => {
+        window.location.href = "Product.html";
+    });
+
+    renderCartSummary();
+});
+    </script>
+</body>
+</html>

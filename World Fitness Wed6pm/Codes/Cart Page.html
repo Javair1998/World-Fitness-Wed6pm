@@ -1,0 +1,133 @@
+<!-- a.	Create a shopping cart page that lists the items in the cart (name, price, quantity, sub-total, discount, tax, and total, etc).
+b.	Allow users to remove items from the cart and update quantities.
+c.	Calculate and display the total price of the items in the cart.
+Include:
+d.	Clear All button (remove all items from shopping cart)
+e.	Check Out button (redirects to Checkout Page)
+f.	Close button (close the shopping cart view)  -->
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Shopping Cart</title>
+    <link rel="stylesheet" href="Style.css">
+</head>
+<body>
+    <div class="sidebar">
+        <nav style="background-color: black;">
+            <div style="display: flex; justify-content: center; align-items: center;">
+                <img class="logo" src="../Assets/logo.png" alt="logo">
+            </div>
+        </nav>
+   
+
+    <div id="cartPage">
+        <center><h2>Shopping Cart</h2></center>
+        <br>
+
+        <ul id="cart-items">
+            
+        </ul>
+        <div id="cart-summary"></div>
+        <button id="clear-all">Clear All</button>
+        <button id="checkoutP">Check Out</button>
+        <button id="close-cart">Close</button>
+    </div>
+    
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+    const cartItemsContainer = document.getElementById('cart-items');
+    const cartSummary = document.getElementById('cart-summary');
+    const clearAllButton = document.getElementById('clear-all');
+    const checkoutButton = document.getElementById('checkoutP');
+    const closeButton = document.getElementById('close-cart');
+    let cartItems = JSON.parse(localStorage.getItem('cartItems')) || [];
+
+    function renderCart() {
+        cartItemsContainer.innerHTML = '';
+        let subtotal = 0;
+        const itemCount = {};
+
+        // Count items and calculate subtotal
+        cartItems.forEach(item => {
+            if (itemCount[item.name]) {
+                itemCount[item.name].quantity += item.quantity;
+            } else {
+                itemCount[item.name] = { ...item, quantity: item.quantity };
+            }
+        });
+
+        // Render cart items
+        for (const itemName in itemCount) {
+            const item = itemCount[itemName];
+            const total = item.price * item.quantity;
+            subtotal += total;
+
+            const li = document.createElement('li');
+            li.classList.add('cart-item');
+            li.innerHTML = `
+                <span class="cart-header">${item.name}</span>
+                <span>Price: $${item.price.toLocaleString()}</span>
+                <span>Quantity: <input type="number" min="1" value="${item.quantity}" onchange="updateQuantity('${item.name}', this.value)"></span>
+                <span>Subtotal: $${total.toLocaleString()}</span>
+                <button onclick="removeItem('${item.name}')">Remove</button>
+            `;
+            cartItemsContainer.appendChild(li);
+        }
+
+        // Calculate tax, discount, and total
+        const tax = subtotal * 0.15; // 15% tax
+        const discount = subtotal * 0.10; // 10% discount
+        const total = subtotal + tax - discount;
+
+        // Render summary
+        const summary = document.createElement('div');
+        summary.innerHTML = `
+            <p>Subtotal: $${subtotal.toLocaleString(2)}</p>
+            <p>Tax (15%): $${tax.toLocaleString(2)}</p>
+            <p>Discount (10%): -$${discount.toLocaleString(2)}</p>
+            <p>Total: $${total.toLocaleString(2)}</p>
+        `;
+        cartItemsContainer.appendChild(summary);
+    }
+
+    window.updateQuantity = function(name, quantity) {
+        const item = cartItems.find(i => i.name === name);
+        if (item) {
+            item.quantity = parseInt(quantity);
+            localStorage.setItem('cartItems', JSON.stringify(cartItems));
+            renderCart();
+        }
+    };
+
+    window.removeItem = function(name) {
+        cartItems = cartItems.filter(item => item.name !== name);
+        localStorage.setItem('cartItems', JSON.stringify(cartItems));
+        renderCart();
+    };
+
+    clearAllButton.addEventListener('click', () => {
+        cartItems = [];
+        localStorage.removeItem('cartItems');
+        renderCart();
+    });
+
+    checkoutButton.addEventListener('click', () => {
+        localStorage.setItem('cartItems', JSON.stringify(cartItems));
+        window.location.href = "Checkout Page.html";
+    });
+
+    closeButton.addEventListener('click', () => {
+        window.location.href = "Product.html";
+    });
+
+    renderCart();
+});
+
+    </script>
+
+    
+</body>
+</html>

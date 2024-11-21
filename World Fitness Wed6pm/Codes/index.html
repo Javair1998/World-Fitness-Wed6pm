@@ -1,0 +1,70 @@
+   <!-- 
+     Names: Tavaughn Henry, Aljermaine Hutchinson , Nswain Shakespeare and Roxann Jahnson
+    ID#: 2305252 , 2205641 , 2006054 , 2306621
+    Class Day and Time: Wednesday 6pm - 8pm -->
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login Page</title>
+    <link rel="stylesheet" href="Style.css">
+</head>
+<body>
+    <div class="Ground">
+        <div class="form_box">
+            <div class="button-box">
+                <div id="btn"></div>
+                <button type="button" class="toggle-btn" onclick="Login()">Login</button>
+                <button type="button" class="toggle-btn" onclick="Register()">Register</button>
+            </div>
+            <!-- b.	Login Page:
+i.	create a login form where visitors can enter their trn and password provided at registration.
+ -->
+            <!-- Login form -->
+             <div class="login-form">
+                <form id="Login" class="inputGroup" action="#" onsubmit="return false;">
+                    <input type="text" id="login-trn" placeholder="Tax Registration Number" required>
+                    <input type="password" id="login-password" placeholder="Password" required>
+                    <button type="submit" id="login-submit" onclick="login()">Login</button>
+                    <button type="button" id="login-cancel" onclick="clearLoginForm()">Cancel</button>
+                    <a href="#" onclick="resetPassword()">Reset Password</a>
+                    <div id="message"></div>
+                </form>
+                
+                <!-- a.	Registration Page:
+i.	create a registration form where users can enter their first name, last name, date of birth, gender, phone number, email, tax registration number (trn), and password, etc. 
+ -->
+                <!-- Registration form -->
+                <div class="scrollable-content">
+                    <form id="Register" class="inputGroup" action="#" onsubmit="return false;">
+                        <input type="text" id="firstName" placeholder="First Name" required>
+                        <input type="text" id="lastName" placeholder="Last Name" required>
+                        <input type="date" id="dob" placeholder="Date of Birth" required>
+                        <select id="gender" required>
+                            <option value="">Select Gender</option>
+                            <option value="male">Male</option>
+                            <option value="female">Female</option>
+                            <option value="other">Other</option>
+                        </select>
+                        <input type="tel" id="phone" placeholder="Phone Number" required>
+                        <input type="email" id="email" placeholder="Email" required>
+                        <input type="text" id="trn" placeholder="Tax Registration Number (000-000-000)" pattern="\d{3}-\d{3}-\d{3}" required>
+                        <input type="password" id="password" placeholder="Enter Password" minlength="8" required>
+                        <button type="submit" id="register-submit">Register</button>
+                        <button type="button" id="register-cancel" onclick="clearRegistrationForm()">Cancel</button>
+                        <div id="message"></div>
+                    </form>
+
+                    
+            </div>
+            
+        </div>
+       
+    </div>
+
+    <script src="Javascript.js"></script>
+    <script src="main.js"></script>
+</body>
+</html>
